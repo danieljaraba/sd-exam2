@@ -1,0 +1,10 @@
+name: nginx-app
+namespace: danieljaraba
+replicas: 3
+image: nginx:1.12.0
+containerPort: 80
+
+service:
+  portname: nginx-port
+  port: 80
+  targetPort: 80

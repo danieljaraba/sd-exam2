@@ -1,0 +1,12 @@
+name: ubuntu-app
+namespace: danieljaraba
+image: ubuntu:latest
+containerPort: 3000
+
+service:
+  portname: ubuntu-port
+  port: 3000
+  targetPort: 3000
+
+nginx:
+  name: nginx-app

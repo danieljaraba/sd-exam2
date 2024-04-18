@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Values.name }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.name }}
+    spec:
+      containers:
+        - name: {{ .Values.name }}
+          image: {{ .Values.image }}
+          ports:
+            - containerPort: {{ .Values.containerPort }}
+          command: ["/bin/bash", "-c"]
+          args:
+          - >
+            apt-get update &&
+            apt-get install -y wget &&
+            while true; do
+              if wget -qO- http://{{ .Values.nginx.name }}; then
+                echo "$(date) - Request to nginx successful."
+              else
+                echo "$(date) - Request to nginx failed."
+              fi
+              sleep 10;  # Espera 10 segundos entre cada solicitud.
+            done
+          env:
+            {{- range .Values.env }}
+            - name: {{ .name }}
+              value: "{{ .value }}"
+            {{- end }}
+
